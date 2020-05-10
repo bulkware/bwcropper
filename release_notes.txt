@@ -1,6 +1,9 @@
 bwCropper - Release Notes
 -------------------------
 
+Version 2.0.2
+- Loop angles in order.
+
 Version 2.0.1
 - Output results as table.
 

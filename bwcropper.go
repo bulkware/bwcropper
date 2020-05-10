@@ -24,7 +24,7 @@ import (
 
 // Declare variables
 var (
-	angle         (float64) = 0.00 // Angle to rotate to
+	angle         (float64) = 1.00 // Angle to rotate to
 	bestAngle     (float64)        // Best angle stored in a separate variable
 	exceedCounter (int)            // Measure when threshold is exceeded
 	fileExists    (bool)           // Boolean to check is a file exists or not
@@ -172,15 +172,10 @@ func main() {
 
 	for {
 
-		// Break if angles exceed x degrees in either direction
-		if angle < 359.00 {
-			if angle >= 1.00 {
-				break
-			}
-		}
-
-		// If angle is 360.00, correct it to 0.00
-		if angle >= 360.00 {
+		// If angle is over maximum values, correct it
+		if angle < 0.00 {
+			angle = 359.99
+		} else if angle > 359.99 {
 			angle = 0.00
 		}
 
@@ -258,14 +253,14 @@ func main() {
 			results["left"] = left
 		}
 
-		// Decrease/increase angle
-		if angle == 0.00 {
-			angle += 0.01
-		} else if angle <= 180 {
-			angle = 360.00 - angle
-		} else if angle > 180 {
-			angle = 360.00 - angle
-			angle += 0.01
+		// Decrease angle
+		angle -= 0.01
+
+		// Break if angles exceed x degrees in either direction
+		if angle < 359.00 {
+			if angle > 1.00 {
+				break
+			}
 		}
 	}
 
