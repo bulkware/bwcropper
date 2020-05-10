@@ -1,6 +1,9 @@
 bwCropper - Release Notes
 -------------------------
 
+Version 2.0.1
+- Output results as table.
+
 Version 2.0.0
 - Initial version.
 - Re-written using Go.

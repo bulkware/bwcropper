@@ -166,6 +166,10 @@ func main() {
 	results := make(map[string]int)
 	width, height := loadedImage.Bounds().Max.X, loadedImage2.Bounds().Max.Y
 
+	// Print results table header
+	fmt.Println("   Angle |      Top |    Right |   Bottom |    Left ")
+	fmt.Println("----------------------------------------------------")
+
 	for {
 
 		// Break if angles exceed x degrees in either direction
@@ -180,25 +184,11 @@ func main() {
 			angle = 0.00
 		}
 
-		// Print current angle
-		if angle == 0.00 {
-			fmt.Println("Testing angle: 0.00")
-		} else {
-			fmt.Println("Rotating to angle: " +
-				strconv.FormatFloat(angle, 'f', 2, 64))
-		}
-
 		// Rotate image
 		loadedImage2 = imaging.Rotate(loadedImage, angle, blackColor)
 
 		// Retrieve image dimensions
 		width, height = loadedImage2.Bounds().Max.X, loadedImage2.Bounds().Max.Y
-
-		// Print image dimensions
-		fmt.Println("Image dimensions: " +
-			strconv.FormatUint(uint64(width), 10) +
-			"x" +
-			strconv.FormatUint(uint64(height), 10))
 
 		// Options for detecting the top side
 		opts["start1"] = 0
@@ -212,11 +202,6 @@ func main() {
 		// Calculate black borders using a function
 		top, topPercent := calculatePosition(loadedImage2, opts)
 
-		// Print results
-		fmt.Println(
-			"Top position: " + strconv.FormatUint(uint64(top), 10) +
-				", percent: " + strconv.FormatUint(uint64(topPercent), 10))
-
 		// Options for detecting the left side
 		opts["start1"] = 0
 		opts["stop1"] = width
@@ -228,11 +213,6 @@ func main() {
 
 		// Calculate black borders using a function
 		left, leftPercent := calculatePosition(loadedImage2, opts)
-
-		// Print results
-		fmt.Println(
-			"Left position: " + strconv.FormatUint(uint64(left), 10) +
-				", percent: " + strconv.FormatUint(uint64(leftPercent), 10))
 
 		// Options for detecting the bottom side
 		opts["start1"] = height
@@ -246,11 +226,6 @@ func main() {
 		// Calculate black borders using a function
 		bottom, bottomPercent := calculatePosition(loadedImage2, opts)
 
-		// Print results
-		fmt.Println(
-			"Bottom position: " + strconv.FormatUint(uint64(bottom), 10) +
-				", percent: " + strconv.FormatUint(uint64(bottomPercent), 10))
-
 		// Options for detecting the right side
 		opts["start1"] = width
 		opts["stop1"] = 0
@@ -263,20 +238,18 @@ func main() {
 		// Calculate black borders using a function
 		right, rightPercent := calculatePosition(loadedImage2, opts)
 
-		// Print results
-		fmt.Println(
-			"Right position: " + strconv.FormatUint(uint64(right), 10) +
-				", percent: " + strconv.FormatUint(uint64(rightPercent), 10))
-
 		// Calculate totalPercent from result
 		total = topPercent + rightPercent + bottomPercent + leftPercent
 
+		// Output results
+		fmt.Printf("%8v", strconv.FormatFloat(angle, 'f', 2, 64))
+		fmt.Printf(" | %8v", top)
+		fmt.Printf(" | %8v", right)
+		fmt.Printf(" | %8v", bottom)
+		fmt.Printf(" | %8v\n", left)
+
 		// Save results
 		if results["total"] == 0 || total < results["total"] {
-			fmt.Println("Saving results. Total: " +
-				strconv.FormatUint(uint64(total), 10) +
-				", old total was: " +
-				strconv.FormatUint(uint64(results["total"]), 10))
 			bestAngle = angle
 			results["total"] = total
 			results["top"] = top
@@ -294,10 +267,10 @@ func main() {
 			angle = 360.00 - angle
 			angle += 0.01
 		}
-
-		// Print empty line to distinguish results
-		fmt.Println("")
 	}
+
+	// Print empty line
+	fmt.Println()
 
 	// Rotate image to best angle
 	loadedImage2 = imaging.Rotate(loadedImage, bestAngle, blackColor)
