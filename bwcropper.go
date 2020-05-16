@@ -167,8 +167,8 @@ func main() {
 	width, height := loadedImage.Bounds().Max.X, loadedImage2.Bounds().Max.Y
 
 	// Print results table header
-	fmt.Println("   Angle |      Top |    Right |   Bottom |    Left ")
-	fmt.Println("----------------------------------------------------")
+	fmt.Println("   Angle |    Total |      Top |    Right |   Bottom |    Left ")
+	fmt.Println("---------------------------------------------------------------")
 
 	for {
 
@@ -238,6 +238,7 @@ func main() {
 
 		// Output results
 		fmt.Printf("%8v", strconv.FormatFloat(angle, 'f', 2, 64))
+		fmt.Printf(" | %8v", total)
 		fmt.Printf(" | %8v", top)
 		fmt.Printf(" | %8v", right)
 		fmt.Printf(" | %8v", bottom)
